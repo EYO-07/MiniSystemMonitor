@@ -4,6 +4,7 @@ Hi, I am oZumbiAnalitico an amateur programmer. This program was made with Visua
 1. OpenHardwareMonitorLib.dll ; Download the [OpenHardwareMonitorLib](https://openhardwaremonitor.org) and put the OpenHardwareMonitorLib.dll inside the executable folder.
 2. yt-dlp ; Works with [yt-dlp](https://github.com/yt-dlp/yt-dlp), put the yt-dlp.exe in the same directory or use the context menu to find yt-dlp.
 3. Windows Media Player ; Sometimes windows users unistall wmp T.T
+4. You can find the binaries on x64/release folder, add OpenHardwareMonitorLib.dll and optionally yt-dlp.exe in this folder.
 
 [ MiniSystemMonitor ] : Minimalist Translucent Gadget for Monitoring Resources 
 1. Display CPU Load, Temperature.
