@@ -1,10 +1,8 @@
 # MiniSystemMonitor
 
-Hi, I am oZumbiAnalitico an amateur programmer
-... This program was made with Visual Studio Community and assisted by Grok A.I.
-... it uses third party resources which I can't store here, so you need to find by yourself
+Hi, I am oZumbiAnalitico an amateur programmer. This program was made with Visual Studio Community and assisted by Grok A.I. It uses third party resources which I can't store here, so you need to find by yourself
 1. OpenHardwareMonitorLib.dll ; Download the OpenHardwareMonitorLib and put the OpenHardwareMonitorLib.dll inside the executable folder.
-2. yt-dlp ; 
+2. yt-dlp ; Works with yt-dlp, put the yt-dlp.exe in the same directory or use the context menu to find yt-dlp.
 3. Windows Media Player ; ...
 
 [ MiniSystemMonitor ] : Minimalist Translucent Gadget for Monitoring Resources 
