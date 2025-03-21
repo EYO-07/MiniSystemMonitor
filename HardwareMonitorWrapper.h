@@ -51,6 +51,7 @@ public:
         computer->GPUEnabled = true;
         computer->HDDEnabled = true;
         computer->RAMEnabled = true;
+        //computer->MainboardEnabled = true;
         computer->Open();
     }
 

@@ -5,7 +5,7 @@ using namespace System::Drawing;
 using namespace System::IO; // Para Directory e File
 using namespace WMPLib; // Também necessário para IWMPPlaylist e IWMPMedia
 using namespace AxWMPLib; // Para Windows Media Player
-using namespace System::Diagnostics; 
+using namespace System::Diagnostics;
 
 // Formulário principal da GUI
 public ref class MainForm : public Form {
@@ -103,14 +103,135 @@ private:
         }
         // --
         this->Size = System::Drawing::Size(window_width, mediaPlayer->Location.Y + floor(1.3*mediaPlayer->Size.Height) );
+		InitializeContextMenu();
         // Timer para atualização automática
         updateTimer = gcnew System::Windows::Forms::Timer(); {
             updateTimer->Interval = 1000;              // 1 segundo
             updateTimer->Tick += gcnew EventHandler(this, &MainForm::update);
             updateTimer->Start();                      // Inicia o timer
         }
-        // Adicionado: Configuração do menu de contexto
+        // -- 
+        playTimer = gcnew System::Windows::Forms::Timer(); { 
+            playTimer->Interval = 100; // 100ms de atraso
+            playTimer->Tick += gcnew EventHandler(this, &MainForm::PlayTimer_Tick);
+            playTimer->Enabled = false; // Desativado por padrão
+        }
+    }
+	void SFC_Click(Object^ sender, EventArgs^ e){
+		Process^ process = gcnew Process();
+		try {
+			ProcessStartInfo^ startInfo = gcnew ProcessStartInfo();
+			startInfo->FileName = "cmd";       // Caminho do executável
+			startInfo->Arguments = "sfc /scannow";        // Argumentos (opcional)
+			startInfo->UseShellExecute = true;      // Não usa o shell (permite redirecionar saída, se necessário)
+			startInfo->RedirectStandardOutput = false; // Redireciona a saída para capturá-la (opcional)
+			startInfo->CreateNoWindow = false;        // Não cria uma janela visível (opcional)
+			process->StartInfo = startInfo;
+			process->Start(); // Inicia o programa
+		}
+		catch (Exception^ ex) {
+			MessageBox::Show("Aplicativo não encontrado", "Erro", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+            return;
+		}
+	}
+	void DISM_Check_Click(Object^ sender, EventArgs^ e){
+		Process^ process = gcnew Process();
+		try {
+			ProcessStartInfo^ startInfo = gcnew ProcessStartInfo();
+			startInfo->FileName = "cmd";       // Caminho do executável
+			startInfo->Arguments = "/k DISM /Online /Cleanup-Image /CheckHealth";        // Argumentos (opcional)
+			startInfo->UseShellExecute = true;      // Não usa o shell (permite redirecionar saída, se necessário)
+			startInfo->RedirectStandardOutput = false; // Redireciona a saída para capturá-la (opcional)
+			startInfo->CreateNoWindow = false;        // Não cria uma janela visível (opcional)
+			//startInfo->StandardOutputEncoding = System::Text::Encoding::GetEncoding(GetOEMCP());
+			process->StartInfo = startInfo;
+			process->Start(); // Inicia o programa
+		}
+		catch (Exception^ ex) {
+			MessageBox::Show("Aplicativo não encontrado", "Erro", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+            return;
+		}
+	}
+	void DISM_Scan_Click(Object^ sender, EventArgs^ e){
+		Process^ process = gcnew Process();
+		try {
+			ProcessStartInfo^ startInfo = gcnew ProcessStartInfo();
+			startInfo->FileName = "cmd";       // Caminho do executável
+			startInfo->Arguments = "/k DISM /Online /Cleanup-Image /ScanHealth";        // Argumentos (opcional)
+			startInfo->UseShellExecute = true;      // Não usa o shell (permite redirecionar saída, se necessário)
+			startInfo->RedirectStandardOutput = false; // Redireciona a saída para capturá-la (opcional)
+			startInfo->CreateNoWindow = false;        // Não cria uma janela visível (opcional)
+			//startInfo->StandardOutputEncoding = System::Text::Encoding::GetEncoding(GetOEMCP());
+			process->StartInfo = startInfo;
+			process->Start(); // Inicia o programa
+		}
+		catch (Exception^ ex) {
+			MessageBox::Show("Aplicativo não encontrado", "Erro", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+            return;
+		}
+	}
+	void DISM_Restore_Click(Object^ sender, EventArgs^ e){
+		Process^ process = gcnew Process();
+		try {
+			ProcessStartInfo^ startInfo = gcnew ProcessStartInfo();
+			startInfo->FileName = "cmd";       // Caminho do executável
+			startInfo->Arguments = "/k DISM /Online /Cleanup-Image /RestoreHealth";        // Argumentos (opcional)
+			startInfo->UseShellExecute = true;      // Não usa o shell (permite redirecionar saída, se necessário)
+			startInfo->RedirectStandardOutput = false; // Redireciona a saída para capturá-la (opcional)
+			startInfo->CreateNoWindow = false;        // Não cria uma janela visível (opcional)
+			//startInfo->StandardOutputEncoding = System::Text::Encoding::GetEncoding(GetOEMCP());
+			process->StartInfo = startInfo;
+			process->Start(); // Inicia o programa
+		}
+		catch (Exception^ ex) {
+			MessageBox::Show("Aplicativo não encontrado", "Erro", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+            return;
+		}
+	}
+	void winget_click(Object^ sender, EventArgs^ e){
+		Process^ process = gcnew Process();
+		try {
+			ProcessStartInfo^ startInfo = gcnew ProcessStartInfo();
+			startInfo->FileName = "cmd";       // Caminho do executável
+			startInfo->Arguments = "/k winget upgrade --all";        // Argumentos (opcional)
+			startInfo->UseShellExecute = true;      // Não usa o shell (permite redirecionar saída, se necessário)
+			startInfo->RedirectStandardOutput = false; // Redireciona a saída para capturá-la (opcional)
+			startInfo->CreateNoWindow = false;        // Não cria uma janela visível (opcional)
+			//startInfo->StandardOutputEncoding = System::Text::Encoding::GetEncoding(GetOEMCP());
+			process->StartInfo = startInfo;
+			process->Start(); // Inicia o programa
+		}
+		catch (Exception^ ex) {
+			MessageBox::Show("Aplicativo não encontrado", "Erro", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+            return;
+		}
+	}
+	void InitializeContextMenu(){
         contextMenu = gcnew System::Windows::Forms::ContextMenuStrip(); {
+			ToolStripMenuItem^ systemSubmenuItem = gcnew ToolStripMenuItem("System Tools");
+			{
+				ToolStripMenuItem^ option1Item = gcnew ToolStripMenuItem("sfc /scannow"); {
+					option1Item->Click += gcnew EventHandler(this, &MainForm::SFC_Click);
+					systemSubmenuItem->DropDownItems->Add(option1Item);
+				}
+				ToolStripMenuItem^ option2Item = gcnew ToolStripMenuItem("Dism ... /CheckHealth"); {
+					option2Item->Click += gcnew EventHandler(this, &MainForm::DISM_Check_Click);
+					systemSubmenuItem->DropDownItems->Add(option2Item);
+				}
+				ToolStripMenuItem^ option3Item = gcnew ToolStripMenuItem("Dism ... /ScanHealth"); {
+					option3Item->Click += gcnew EventHandler(this, &MainForm::DISM_Scan_Click);
+					systemSubmenuItem->DropDownItems->Add(option3Item);
+				}
+				ToolStripMenuItem^ option4Item = gcnew ToolStripMenuItem("Dism ... /RestoreHealth"); {
+					option4Item->Click += gcnew EventHandler(this, &MainForm::DISM_Restore_Click);
+					systemSubmenuItem->DropDownItems->Add(option4Item);
+				}
+				ToolStripMenuItem^ option5Item = gcnew ToolStripMenuItem("winget upgrade --all"); {
+					option5Item->Click += gcnew EventHandler(this, &MainForm::winget_click);
+					systemSubmenuItem->DropDownItems->Add(option5Item);
+				}
+			}
+			contextMenu->Items->Add(systemSubmenuItem);
             ToolStripMenuItem^ loadFileItem = gcnew ToolStripMenuItem("Load Media File"); {
                 loadFileItem->Click += gcnew EventHandler(this, &MainForm::LoadFile_Click);
                 contextMenu->Items->Add(loadFileItem);
@@ -132,7 +253,7 @@ private:
 			}
 			downItem->Click += gcnew EventHandler(this, &MainForm::YT_DLP_Click);
 			contextMenu->Items->Add(downItem);
-			ToolStripMenuItem^ opacityItem = gcnew ToolStripMenuItem("Adjust Opacity"); {
+			ToolStripMenuItem^ opacityItem = gcnew ToolStripMenuItem("Transparency"); {
                 opacityItem->Click += gcnew EventHandler(this, &MainForm::OpacityItem_Click);
                 contextMenu->Items->Add(opacityItem);
             }
@@ -142,13 +263,7 @@ private:
             }
         } 
         this->ContextMenuStrip = contextMenu; 
-        // -- 
-        playTimer = gcnew System::Windows::Forms::Timer(); { 
-            playTimer->Interval = 100; // 100ms de atraso
-            playTimer->Tick += gcnew EventHandler(this, &MainForm::PlayTimer_Tick);
-            playTimer->Enabled = false; // Desativado por padrão
-        }
-    }
+	}
     void update(Object^ sender, EventArgs^ e) {
         wrapper->update();
         double load = 0.0;
@@ -158,7 +273,12 @@ private:
         {
             load = wrapper->cpu_load;
             temp = wrapper->cpu_temp;
-            if (temp < 40) { cpuLabel->ForeColor = Color::White; }
+			if (temp < 38){
+				cpuLabel->ForeColor = Color::LightBlue; 
+			}
+            else if (temp < 40) { 
+				cpuLabel->ForeColor = Color::White; 
+			}
             else if (temp < 50) {
                 cpuLabel->ForeColor = Color::Yellow;
             }
@@ -178,7 +298,12 @@ private:
         {
             load = wrapper->gpu_load;
             temp = wrapper->gpu_temp;
-            if (temp < 40) { gpuLabel->ForeColor = Color::White; }
+			if (temp < 39) {
+				gpuLabel->ForeColor = Color::LightBlue; 
+			}
+            else if (temp < 40) { 
+				gpuLabel->ForeColor = Color::White; 
+			}
             else if (temp < 50) {
                 gpuLabel->ForeColor = Color::Yellow;
             }
@@ -197,7 +322,12 @@ private:
         // -- Ram
         {
             load = wrapper->ram_load;
-            if (load < 30) { ramLabel->ForeColor = Color::White; }
+			if (load < 20){
+				ramLabel->ForeColor = Color::LightBlue; 
+			}
+            else if (load < 30) { 
+				ramLabel->ForeColor = Color::White; 
+			}
             else if (load < 40) {
                 ramLabel->ForeColor = Color::Yellow;
             }
@@ -218,7 +348,12 @@ private:
         {
             load = wrapper->drive_load;
             temp = wrapper->drive_temp;
-            if (temp < 34) { diskLabel->ForeColor = Color::White; }
+			if (temp < 32){
+				diskLabel->ForeColor = Color::LightBlue; 
+			}
+            else if (temp < 34) { 
+				diskLabel->ForeColor = Color::White; 
+			}
             else if (temp < 36) {
                 diskLabel->ForeColor = Color::Yellow;
             }
