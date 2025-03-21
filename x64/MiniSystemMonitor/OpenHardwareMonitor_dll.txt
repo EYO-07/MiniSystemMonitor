@@ -1,1 +1,0 @@
-This is just a place-holder, delete and put the OpenHardwareMonitor.dll in this folder !!!
