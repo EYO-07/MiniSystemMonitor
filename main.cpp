@@ -122,7 +122,7 @@ private:
 		try {
 			ProcessStartInfo^ startInfo = gcnew ProcessStartInfo();
 			startInfo->FileName = "cmd";       // Caminho do executável
-			startInfo->Arguments = "sfc /scannow";        // Argumentos (opcional)
+			startInfo->Arguments = "/k sfc /scannow";        // Argumentos (opcional)
 			startInfo->UseShellExecute = true;      // Não usa o shell (permite redirecionar saída, se necessário)
 			startInfo->RedirectStandardOutput = false; // Redireciona a saída para capturá-la (opcional)
 			startInfo->CreateNoWindow = false;        // Não cria uma janela visível (opcional)
