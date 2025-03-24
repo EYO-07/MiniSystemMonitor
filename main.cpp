@@ -21,7 +21,7 @@ private:
     System::Collections::Generic::List<String^>^ mp3FilesList;
     System::Windows::Forms::ContextMenuStrip^ contextMenu; // Adicionado: menu de contexto
     int label_width = 260;
-    int window_width = label_width + 18;
+    int window_width = label_width ;
     double font_size = 8.5;
     int label_height = 20;
     int label_starting_X = 5;
@@ -30,6 +30,7 @@ private:
 	String^ YT_DLP_fullPath;
 	ToolStripMenuItem^ downItem;
 	ToolStripMenuItem^ clearListItem;
+	int height_with_media, height_no_media;
 public:
     MainForm() {
         wrapper = gcnew HardwareMonitorWrapper();
@@ -102,7 +103,9 @@ private:
             this->Controls->Add(mediaPlayer);
         }
         // --
-        this->Size = System::Drawing::Size(window_width, mediaPlayer->Location.Y + floor(1.3*mediaPlayer->Size.Height) );
+		height_no_media = mediaPlayer->Location.Y;
+		height_with_media = mediaPlayer->Location.Y+ mediaPlayer->Size.Height+10;
+        this->ClientSize = System::Drawing::Size(window_width, height_no_media );
 		InitializeContextMenu();
         // Timer para atualização automática
         updateTimer = gcnew System::Windows::Forms::Timer(); {
@@ -415,6 +418,12 @@ private:
                 playTimer->Enabled = true; // Inicia o timer para chamar play()
             }
         }
+		// -- 
+		if (mediaPlayer->playState == WMPPlayState::wmppsPlaying) { 
+            this->ClientSize = System::Drawing::Size(window_width, height_with_media);
+		} else {
+            this->ClientSize = System::Drawing::Size(window_width, height_no_media);
+		}
     }
     void Form_KeyDown(Object^ sender, KeyEventArgs^ e) {
         if (e->KeyCode == Keys::Space) { 
@@ -439,7 +448,7 @@ private:
             mediaPlayer->Ctlcontrols->play();
             mp3FilesList->Add(selectedFile); // Opcional
             mediaPlayer->Size = System::Drawing::Size(label_width - 10, (label_width - 10)*9/16 ); 
-            this->Size = System::Drawing::Size(window_width, mediaPlayer->Location.Y + floor(1.3 * mediaPlayer->Size.Height));
+            this->ClientSize = System::Drawing::Size(window_width, height_with_media );
 			clearListItem->Text = "Clear List ("+mp3FilesList->Count.ToString("F0")+")";
         }
     }
