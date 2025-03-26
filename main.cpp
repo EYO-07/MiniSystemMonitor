@@ -439,7 +439,7 @@ private:
     }
     void LoadFile_Click(Object^ sender, EventArgs^ e) {
         System::Windows::Forms::OpenFileDialog^ openFileDialog = gcnew System::Windows::Forms::OpenFileDialog();
-        openFileDialog->Filter = "Arquivos MP3 (*.mp3)|*.mp3|Arquivos MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*";
+        openFileDialog->Filter = "MP3/MP4|*.mp3;*.mp4|Any (*.*)|*.*";
         openFileDialog->Title = "Selecione um arquivo";
         openFileDialog->Multiselect = false;
         if (openFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
