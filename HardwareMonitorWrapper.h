@@ -27,7 +27,13 @@ public:
     double ram_load;
     double ram_temp;
     double ram_fan;
-
+	// -- mother board
+	double mother_load;
+	double mother_temp;
+    double mother_board_fan;
+	//
+	String^ fanInfo;
+	
     HardwareMonitorWrapper() {
         // --
         cpu_temp = 0.0;
@@ -45,13 +51,17 @@ public:
         ram_load = 0.0;
         ram_temp = 0.0;
         ram_fan = 0.0;
+		// -- 
+		mother_load = 0.0;
+		mother_temp = 0.0;
+		mother_board_fan = 0.0;
         // --
         computer = gcnew Computer();
         computer->CPUEnabled = true;
         computer->GPUEnabled = true;
         computer->HDDEnabled = true;
         computer->RAMEnabled = true;
-        //computer->MainboardEnabled = true;
+        computer->MainboardEnabled = true;
         computer->Open();
     }
 

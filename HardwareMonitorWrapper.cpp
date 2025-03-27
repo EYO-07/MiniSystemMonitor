@@ -6,47 +6,70 @@ using namespace System::Threading; // Necessário para Thread::Sleep
 using namespace OpenHardwareMonitor::Hardware;
    
 void HardwareMonitorWrapper::update() {
+	this->fanInfo = "";
     for each (IHardware ^ hardware in computer->Hardware) {
+		hardware->Update();
         if (hardware->HardwareType == HardwareType::CPU) {
-            hardware->Update();
+            //hardware->Update();
             for each (ISensor ^ sensor in hardware->Sensors) {
                 if (sensor->SensorType == SensorType::Load) this->cpu_load = getValue(sensor);
                 if (sensor->SensorType == SensorType::Temperature) this->cpu_temp = getValue(sensor);
                 if (sensor->SensorType == SensorType::Fan) this->cpu_fan = getValue(sensor);
             }
+			//continue;
         }
         if (hardware->HardwareType == HardwareType::GpuNvidia) {
-            hardware->Update();
+            //hardware->Update();
             for each (ISensor ^ sensor in hardware->Sensors) {
                 if (sensor->SensorType == SensorType::Load) this->gpu_load = getValue(sensor);
                 if (sensor->SensorType == SensorType::Temperature) this->gpu_temp = getValue(sensor);
                 if (sensor->SensorType == SensorType::Fan) this->gpu_fan = getValue(sensor);
             }
+			//continue;
         } else if (hardware->HardwareType == HardwareType::GpuAti) {
-            hardware->Update();
+            //hardware->Update();
             for each (ISensor ^ sensor in hardware->Sensors) {
                 if (sensor->SensorType == SensorType::Load) this->gpu_load = getValue(sensor);
                 if (sensor->SensorType == SensorType::Temperature) this->gpu_temp = getValue(sensor);
                 if (sensor->SensorType == SensorType::Fan) this->gpu_fan = getValue(sensor);
             }
+			//continue;
         }
         if (hardware->HardwareType == HardwareType::HDD) {
-            hardware->Update();
+            //hardware->Update();
             for each (ISensor ^ sensor in hardware->Sensors) {
                 if (sensor->SensorType == SensorType::Load) this->drive_load = getValue(sensor);
                 if (sensor->SensorType == SensorType::Temperature) this->drive_temp = getValue(sensor);
                 if (sensor->SensorType == SensorType::Fan) this->drive_fan = getValue(sensor);
             }
+			//continue;
         }
         if (hardware->HardwareType == HardwareType::RAM) {
-            hardware->Update();
+            //hardware->Update();
             for each (ISensor ^ sensor in hardware->Sensors) {
                 if (sensor->SensorType == SensorType::Load) this->ram_load = getValue(sensor);
                 if (sensor->SensorType == SensorType::Temperature) this->ram_temp = getValue(sensor);
                 if (sensor->SensorType == SensorType::Fan) this->ram_fan = getValue(sensor);
             }
+			//continue;
         }
-    }
+		if (hardware->HardwareType == HardwareType::Mainboard){
+			//hardware->Update();
+			for each (ISensor ^ sensor in hardware->Sensors) {
+				// >>
+				if (sensor->SensorType == SensorType::Load) this->mother_load = getValue(sensor);
+                if (sensor->SensorType == SensorType::Temperature) this->mother_temp = getValue(sensor);
+                if (sensor->SensorType == SensorType::Fan) this->mother_board_fan = getValue(sensor); 
+				// <<
+            }
+			//continue;
+		}
+		for each (OpenHardwareMonitor::Hardware::ISensor^ sensor in hardware->Sensors) {
+            if (sensor->SensorType == SensorType::Fan) {
+                this->fanInfo += String::Format("{0:F0} RPM, ", sensor->Value);
+            }
+        }
+	}
 }
 void HardwareMonitorWrapper::cout() {
     // -- CPU

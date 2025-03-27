@@ -15,6 +15,7 @@ private:
     Label^ gpuLabel;
     Label^ diskLabel;
     Label^ ramLabel;
+	Label^ motherLabel;
     System::Windows::Forms::Timer^ updateTimer;
     System::Windows::Forms::Timer^ playTimer;
     AxWindowsMediaPlayer^ mediaPlayer; // Controle para tocar MP3
@@ -93,9 +94,22 @@ private:
             diskLabel->Font = gcnew Drawing::Font("Consolas", font_size, FontStyle::Bold);
             this->Controls->Add(diskLabel);
         }
-        // --- Windows Media Player ---
+        // >>
+		
+		motherLabel = gcnew Label(); {
+			motherLabel->Location = Point(label_starting_X, diskLabel->Location.Y + label_height );       // Posição (x, y)
+            motherLabel->Size = System::Drawing::Size(label_width, label_height); // Tamanho do label
+            motherLabel->Text = "[ MB ] ... Initializing ...";
+            motherLabel->ForeColor = Color::White;
+            motherLabel->BackColor = Color::Black;
+            motherLabel->Font = gcnew Drawing::Font("Consolas", font_size, FontStyle::Bold);
+            this->Controls->Add(motherLabel);
+		}
+		
+		// <<
+		// --- Windows Media Player ---
         mediaPlayer = gcnew AxWindowsMediaPlayer(); {
-            mediaPlayer->Location = Point(label_starting_X, diskLabel->Location.Y+label_height);
+            mediaPlayer->Location = Point(label_starting_X, motherLabel->Location.Y+label_height);
             mediaPlayer->Size = System::Drawing::Size(label_width - 10, (label_width - 10) * 9 / 16 );
             mediaPlayer->Visible = true;
             mediaPlayer->BackColor = Color::Black; // Tenta definir o fundo do controle como preto
@@ -372,6 +386,37 @@ private:
             if (temp) diskLabel->Text += temp.ToString("F1") + "°C ";
             if (fan) diskLabel->Text += fan.ToString("F1") + " RPM ";
         }
+		// >>
+		{
+			/*
+            load = wrapper->mother_load;
+            temp = wrapper->mother_temp;
+			if (temp < 32){
+				motherLabel->ForeColor = Color::LightBlue; 
+			}
+            else if (temp < 34) { 
+				motherLabel->ForeColor = Color::White; 
+			}
+            else if (temp < 36) {
+                motherLabel->ForeColor = Color::Yellow;
+            }
+            else if (temp < 37) {
+                motherLabel->ForeColor = Color::Orange;
+            }
+            else {
+                motherLabel->ForeColor = Color::Red;
+            }
+            fan = wrapper->drive_fan;
+			*/
+			motherLabel->Text = wrapper->fanInfo;
+			/*
+            if (load + temp + fan) motherLabel->Text = "[ MB ] ";
+            if (load) motherLabel->Text += load.ToString("F1") + "% ";
+            if (temp) motherLabel->Text += temp.ToString("F1") + "°C ";
+            if (fan) motherLabel->Text += fan.ToString("F1") + " RPM ";
+			*/
+        }
+		// <<
     }
     void MainForm_Load(Object^ sender, EventArgs^ e) {
         String^ exeDir = Path::GetDirectoryName(Application::ExecutablePath);
@@ -524,7 +569,7 @@ private:
 		try {
 			ProcessStartInfo^ startInfo = gcnew ProcessStartInfo();
 			startInfo->FileName = YT_DLP_fullPath;       // Caminho do executável
-			startInfo->Arguments = URL+" --no-playlist --progress -k --audio-quality 0 --audio-format mp3";        // Argumentos (opcional)
+			startInfo->Arguments = URL+" --no-playlist --progress --audio-quality 0";        // Argumentos (opcional)
 			startInfo->UseShellExecute = true;      // Não usa o shell (permite redirecionar saída, se necessário)
 			startInfo->RedirectStandardOutput = false; // Redireciona a saída para capturá-la (opcional)
 			startInfo->CreateNoWindow = false;        // Não cria uma janela visível (opcional)
