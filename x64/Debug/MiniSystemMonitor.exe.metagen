@@ -36,6 +36,10 @@ Class HardwareMonitorWrapper: AutoLayout, AnsiClass, Class, Public, BeforeFieldI
     Double ram_load : Public
     Double ram_temp : Public
     Double ram_fan : Public
+    Double mother_load : Public
+    Double mother_temp : Public
+    Double mother_board_fan : Public
+    System.String fanInfo : Public
   Methods:
     getValue(ISensor): PrivateScope, Public, HideBySig
     update(): PrivateScope, Public, HideBySig
