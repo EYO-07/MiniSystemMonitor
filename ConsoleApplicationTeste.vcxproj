@@ -145,7 +145,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="app.ico" />
+    <Image Include="app.ico">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AxWMPLib">

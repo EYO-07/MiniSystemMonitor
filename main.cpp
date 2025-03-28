@@ -42,9 +42,11 @@ public:
         this->FormClosing += gcnew FormClosingEventHandler(this, &MainForm::Form_Closing);
         mediaPlayer->PlayStateChange += gcnew AxWMPLib::_WMPOCXEvents_PlayStateChangeEventHandler(this, &MainForm::MediaPlayer_PlayStateChange);
         this->KeyDown += gcnew KeyEventHandler(this, &MainForm::Form_KeyDown); // Adicionado para captura de teclas
+        
     }
 private:    
     void InitializeComponents() {
+        this->Icon = gcnew System::Drawing::Icon("app.ico");
         this->Text = "MiniSystemMonitor"; {
             this->StartPosition = FormStartPosition::Manual;
             // this->Size = System::Drawing::Size(window_width, window_height); // Tamanho da janela
