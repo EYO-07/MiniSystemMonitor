@@ -16,4 +16,7 @@ Hi, I am oZumbiAnalitico an amateur programmer. This program was made with Visua
 7. Support any media format of windows media player (because it's embeded :P).
 8. Context Menu with command line useful commands (sfc, DISM, winget).
 
-Should be something like this [video](https://youtu.be/Rvcw2chJIaU) 
+## Videos
+1. https://youtu.be/U5DsChUS2is?si=P-B_WGgtpNVgcBhv
+2. https://youtu.be/tlE5NIXcAfw?si=0EmuQ193yQdUGHAO
+3. https://youtu.be/Rvcw2chJIaU?si=Fn_un90_Cq8GE2j4
